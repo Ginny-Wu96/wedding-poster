@@ -1,0 +1,8 @@
+{
+  "name": "wedding-poster-selector",
+  "version": "1.0.0",
+  "description": "婚礼迎宾海报选择工具",
+  "scripts": {
+    "start": "npx serve"
+  }
+}

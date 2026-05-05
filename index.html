@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>婚礼海报选择</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif;
+      background: #fafafa;
+      min-height: 100vh;
+      color: #333;
+    }
+
+    .header {
+      text-align: center;
+      padding: 32px 20px 24px;
+      background: linear-gradient(135deg, #fdfbf7 0%, #f5f0eb 100%);
+      border-bottom: 1px solid #eee;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      font-weight: 500;
+      color: #2c2c2c;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .section {
+      padding: 24px 16px;
+    }
+
+    .section-title {
+      font-size: 15px;
+      color: #666;
+      margin-bottom: 16px;
+      padding-left: 4px;
+    }
+
+    /* 模板网格 */
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .template-item {
+      position: relative;
+      aspect-ratio: 3/4;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .template-item.selected {
+      box-shadow: 0 0 0 3px #c9a96e;
+    }
+
+    .template-item:active {
+      transform: scale(0.98);
+    }
+
+    .template-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .template-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 12px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.6));
+      color: white;
+      font-size: 13px;
+    }
+
+    .template-tag {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #c9a96e;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+    }
+
+    /* 预览区 */
+    .preview-section {
+      display: none;
+      padding: 24px 16px;
+      background: #fff;
+      margin: 0 16px 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .preview-section.show {
+      display: block;
+    }
+
+    .preview-title {
+      font-size: 15px;
+      color: #666;
+      margin-bottom: 16px;
+    }
+
+    .preview-container {
+      position: relative;
+      max-width: 300px;
+      margin: 0 auto;
+      background: #f5f5f5;
+      aspect-ratio: 3/4;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      gap: 4px;
+      padding: 8px;
+    }
+
+    .preview-img {
+      flex: 1;
+      background: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .preview-img:hover {
+      background: #d0d0d0;
+    }
+
+    .preview-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .preview-placeholder {
+      color: #999;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .preview-placeholder svg {
+      width: 32px;
+      height: 32px;
+      margin-bottom: 4px;
+      opacity: 0.5;
+    }
+
+    /* 上传框 */
+    .upload-input {
+      display: none;
+    }
+
+    /* 确认按钮 */
+    .confirm-btn {
+      display: block;
+      width: calc(100% - 32px);
+      margin: 0 16px 32px;
+      padding: 16px;
+      background: #c9a96e;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      opacity: 0.5;
+      pointer-events: none;
+      transition: all 0.2s;
+    }
+
+    .confirm-btn.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .confirm-btn.active:active {
+      background: #b8955b;
+    }
+
+    /* 结果展示 */
+    .result-section {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .result-section.show {
+      display: block;
+    }
+
+    .result-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 20px;
+      background: #c9a96e;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .result-icon svg {
+      width: 40px;
+      height: 40px;
+      color: white;
+    }
+
+    .result-text {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .result-sub {
+      font-size: 14px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>婚礼迎宾海报选择</h1>
+    <p>选择一个模板，上传婚纱照预览效果</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">请选择模板风格</div>
+    <div class="template-grid" id="templateGrid"></div>
+  </div>
+
+  <div class="preview-section" id="previewSection">
+    <div class="preview-title">上传婚纱照预览</div>
+    <div class="preview-container" id="previewContainer"></div>
+  </div>
+
+  <button class="confirm-btn" id="confirmBtn" onclick="confirmSelection()">确认选择此模板</button>
+
+  <div class="result-section" id="resultSection">
+    <div class="result-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+    <div class="result-text">已确认选择</div>
+    <div class="result-sub">请截图此页面发给设计师</div>
+  </div>
+
+  <script>
+    // 模板数据
+    const templates = [
+      {
+        id: 1,
+        name: '现代简约',
+        image: 'https://images.unsplash.com/photo-1529634806980-85c3dd6d34ec?w=400&h=533&fit=crop',
+        slots: 1,
+        desc: '简洁大方'
+      },
+      {
+        id: 2,
+        name: '小清新',
+        image: 'https://images.unsplash.com/photo-1519741497674-611481863241?w=400&h=533&fit=crop',
+        slots: 1,
+        desc: '自然温馨'
+      },
+      {
+        id: 3,
+        name: '新中式',
+        image: 'https://images.unsplash.com/photo-1604017017017-68ac9c7e1b43?w=400&h=533&fit=crop',
+        slots: 1,
+        desc: '传统韵味'
+      },
+      {
+        id: 4,
+        name: '韩式优雅',
+        image: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=400&h=533&fit=crop',
+        slots: 1,
+        desc: '温婉浪漫'
+      },
+      {
+        id: 5,
+        name: '自然森系',
+        image: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce48a?w=400&h=533&fit=crop',
+        slots: 1,
+        desc: '森系风格'
+      },
+      {
+        id: 6,
+        name: '电影质感',
+        image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=400&h=533&fit=crop',
+        slots: 1,
+        desc: '大片风格'
+      },
+      {
+        id: 7,
+        name: '轻奢质感',
+        image: 'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=400&h=533&fit=crop',
+        slots: 1,
+        desc: '精致优雅'
+      },
+      {
+        id: 8,
+        name: '文艺复古',
+        image: 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=400&h=533&fit=crop',
+        slots: 1,
+        desc: '复古胶片'
+      }
+    ];
+
+    let selectedTemplate = null;
+    let uploadedImages = [];
+
+    // 渲染模板
+    function renderTemplates() {
+      const grid = document.getElementById('templateGrid');
+      grid.innerHTML = templates.map(t => `
+        <div class="template-item" onclick="selectTemplate(${t.id})" id="tpl-${t.id}">
+          <img src="${t.image}" alt="${t.name}">
+          <div class="template-label">${t.name}</div>
+          <div class="template-tag">${t.slots}图</div>
+        </div>
+      `).join('');
+    }
+
+    // 选择模板
+    function selectTemplate(id) {
+      // 取消之前的选中
+      document.querySelectorAll('.template-item').forEach(el => el.classList.remove('selected'));
+
+      // 选中当前
+      const item = document.getElementById(`tpl-${id}`);
+      item.classList.add('selected');
+
+      selectedTemplate = templates.find(t => t.id === id);
+      uploadedImages = [];
+
+      // 显示预览区
+      const previewSection = document.getElementById('previewSection');
+      const container = document.getElementById('previewContainer');
+
+      container.innerHTML = '';
+      for (let i = 0; i < selectedTemplate.slots; i++) {
+        container.innerHTML += `
+          <div class="preview-img" id="slot-${i}" onclick="triggerUpload(${i})">
+            <div class="preview-placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <path d="M21 15l-5-5L5 21"/>
+              </svg>
+              <div>点击上传第${i + 1}张</div>
+            </div>
+          </div>
+        `;
+      }
+
+      previewSection.classList.add('show');
+      document.getElementById('confirmBtn').classList.remove('active');
+    }
+
+    // 触发上传
+    function triggerUpload(slot) {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const slotEl = document.getElementById(`slot-${slot}`);
+            slotEl.innerHTML = `<img src="${e.target.result}" alt="婚纱照">`;
+            uploadedImages[slot] = e.target.result;
+            checkConfirmBtn();
+          };
+          reader.readAsDataURL(file);
+        }
+      };
+      input.click();
+    }
+
+    // 检查确认按钮
+    function checkConfirmBtn() {
+      const allFilled = uploadedImages.length >= selectedTemplate.slots && uploadedImages.every(img => img);
+      const btn = document.getElementById('confirmBtn');
+      if (allFilled) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    }
+
+    // 确认选择
+    function confirmSelection() {
+      if (!selectedTemplate) return;
+      if (uploadedImages.length < selectedTemplate.slots || !uploadedImages.every(img => img)) return;
+
+      document.querySelector('.section').style.display = 'none';
+      document.getElementById('previewSection').classList.remove('show');
+      document.getElementById('confirmBtn').style.display = 'none';
+      document.getElementById('resultSection').classList.add('show');
+    }
+
+    renderTemplates();
+  </script>
+</body>
+</html>
