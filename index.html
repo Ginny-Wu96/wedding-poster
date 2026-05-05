@@ -3,88 +3,179 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>婚礼海报选择</title>
+  <title>婚礼迎宾海报选择</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif;
-      background: #fafafa;
+      background: linear-gradient(180deg, #faf8f5 0%, #f5f0e8 100%);
       min-height: 100vh;
-      color: #333;
+      color: #3d3d3d;
     }
 
     .header {
       text-align: center;
-      padding: 32px 20px 24px;
-      background: linear-gradient(135deg, #fdfbf7 0%, #f5f0eb 100%);
-      border-bottom: 1px solid #eee;
+      padding: 40px 24px 32px;
+      background: linear-gradient(180deg, #fdfcfb 0%, transparent 100%);
     }
 
     .header h1 {
-      font-size: 24px;
-      font-weight: 500;
-      color: #2c2c2c;
+      font-size: 26px;
+      font-weight: 600;
+      color: #8b7355;
+      letter-spacing: 4px;
       margin-bottom: 8px;
     }
 
     .header p {
       font-size: 14px;
-      color: #888;
+      color: #b8a890;
+      letter-spacing: 1px;
+    }
+
+    /* 装饰线 */
+    .header::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #d4c4a8, transparent);
+      margin: 20px auto 0;
     }
 
     .section {
-      padding: 24px 16px;
+      padding: 20px 16px 24px;
     }
 
     .section-title {
-      font-size: 15px;
-      color: #666;
-      margin-bottom: 16px;
-      padding-left: 4px;
+      font-size: 13px;
+      color: #b8a890;
+      letter-spacing: 2px;
+      text-align: center;
+      margin-bottom: 20px;
     }
 
-    /* 模板网格 */
+    /* 模板网格 - 中式简约风格 */
     .template-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+      gap: 16px;
+      max-width: 400px;
+      margin: 0 auto;
     }
 
     .template-item {
       position: relative;
       aspect-ratio: 3/4;
-      background: #fff;
-      border-radius: 12px;
+      background: linear-gradient(145deg, #faf8f5 0%, #f0ebe3 100%);
+      border-radius: 4px;
       overflow: hidden;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.3s ease;
+      border: 1px solid #e8e0d5;
     }
 
     .template-item.selected {
-      box-shadow: 0 0 0 3px #c9a96e;
+      border-color: #c9a96e;
+      box-shadow: 0 4px 20px rgba(201, 169, 110, 0.25);
     }
 
     .template-item:active {
       transform: scale(0.98);
     }
 
-    .template-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .template-inner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 12px;
     }
 
-    .template-label {
+    .template-preview {
+      flex: 1;
+      background: linear-gradient(135deg, #f5f0e8 0%, #ebe4d8 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 模拟海报布局 */
+    .poster-mock {
+      width: 80%;
+      height: 90%;
+      background: linear-gradient(180deg, #fdfcfb 0%, #f8f4ed 100%);
+      border: 1px solid #e8dfd3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .poster-mock.type-single .poster-img-area {
+      width: 70%;
+      height: 65%;
+      background: linear-gradient(135deg, #e8e0d5 0%, #d8d0c5 100%);
+      margin-bottom: 8px;
+    }
+
+    .poster-mock.type-dual {
+      flex-direction: row;
+      padding: 8px;
+      gap: 6px;
+    }
+
+    .poster-mock.type-dual .poster-img-area {
+      flex: 1;
+      height: 100%;
+      background: linear-gradient(135deg, #e8e0d5 0%, #d8d0c5 100%);
+    }
+
+    .poster-mock .poster-text-area {
+      width: 60%;
+      height: 8px;
+      background: linear-gradient(90deg, #d4c4a8, #c9b896);
+      border-radius: 2px;
+      margin-top: 6px;
+    }
+
+    .poster-mock.type-dual .poster-text-area {
+      display: none;
+    }
+
+    /* 装饰元素 */
+    .poster-mock::before {
+      content: '';
       position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 12px;
-      background: linear-gradient(transparent, rgba(0,0,0,0.6));
-      color: white;
-      font-size: 13px;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 2px;
+      background: #c9a96e;
+      border-radius: 1px;
+    }
+
+    .template-info {
+      padding: 10px 0 4px;
+      text-align: center;
+    }
+
+    .template-name {
+      font-size: 14px;
+      color: #8b7355;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+
+    .template-slots {
+      font-size: 11px;
+      color: #b8a890;
+      margin-top: 2px;
     }
 
     .template-tag {
@@ -93,77 +184,97 @@
       right: 10px;
       background: #c9a96e;
       color: white;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 2px;
+      font-size: 10px;
+      letter-spacing: 1px;
     }
 
     /* 预览区 */
     .preview-section {
       display: none;
-      padding: 24px 16px;
-      background: #fff;
-      margin: 0 16px 24px;
-      border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      padding: 24px 20px;
+      background: white;
+      margin: 0 16px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(139, 115, 85, 0.1);
+      border: 1px solid #f0ebe3;
     }
 
     .preview-section.show {
       display: block;
     }
 
+    .preview-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
     .preview-title {
       font-size: 15px;
-      color: #666;
-      margin-bottom: 16px;
+      color: #8b7355;
+      letter-spacing: 2px;
+    }
+
+    .preview-subtitle {
+      font-size: 12px;
+      color: #b8a890;
+      margin-top: 4px;
     }
 
     .preview-container {
       position: relative;
-      max-width: 300px;
+      max-width: 280px;
       margin: 0 auto;
-      background: #f5f5f5;
+      background: linear-gradient(180deg, #fdfcfb 0%, #f8f4ed 100%);
       aspect-ratio: 3/4;
-      border-radius: 8px;
+      border-radius: 4px;
       overflow: hidden;
       display: flex;
-      gap: 4px;
-      padding: 8px;
+      gap: 8px;
+      padding: 16px;
+      border: 1px solid #e8dfd3;
     }
 
-    .preview-img {
+    .preview-slot {
       flex: 1;
-      background: #e0e0e0;
+      background: linear-gradient(135deg, #f5f0e8 0%, #ebe4d8 100%);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: all 0.2s;
-      border-radius: 4px;
-      overflow: hidden;
+      border-radius: 2px;
+      border: 1px dashed #d4c4a8;
     }
 
-    .preview-img:hover {
-      background: #d0d0d0;
+    .preview-slot:hover {
+      border-color: #c9a96e;
+      background: #faf8f5;
     }
 
-    .preview-img img {
+    .preview-slot img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
     .preview-placeholder {
-      color: #999;
-      font-size: 12px;
       text-align: center;
+      color: #c4b89c;
     }
 
     .preview-placeholder svg {
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
       margin-bottom: 4px;
-      opacity: 0.5;
+      opacity: 0.6;
+    }
+
+    .preview-placeholder span {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 1px;
     }
 
     /* 上传框 */
@@ -176,16 +287,18 @@
       display: block;
       width: calc(100% - 32px);
       margin: 0 16px 32px;
-      padding: 16px;
-      background: #c9a96e;
+      padding: 15px 24px;
+      background: linear-gradient(180deg, #c9a96e 0%, #b8955b 100%);
       color: white;
       border: none;
-      border-radius: 12px;
-      font-size: 16px;
+      border-radius: 4px;
+      font-size: 15px;
+      letter-spacing: 3px;
       cursor: pointer;
-      opacity: 0.5;
+      opacity: 0.4;
       pointer-events: none;
-      transition: all 0.2s;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(201, 169, 110, 0.3);
     }
 
     .confirm-btn.active {
@@ -194,14 +307,15 @@
     }
 
     .confirm-btn.active:active {
-      background: #b8955b;
+      background: linear-gradient(180deg, #b8955b 0%, #a6854b 100%);
+      transform: translateY(1px);
     }
 
     /* 结果展示 */
     .result-section {
       display: none;
       text-align: center;
-      padding: 40px 20px;
+      padding: 60px 24px;
     }
 
     .result-section.show {
@@ -209,10 +323,10 @@
     }
 
     .result-icon {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 20px;
-      background: #c9a96e;
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 24px;
+      background: linear-gradient(135deg, #c9a96e 0%, #b8955b 100%);
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -220,40 +334,70 @@
     }
 
     .result-icon svg {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       color: white;
     }
 
     .result-text {
       font-size: 18px;
-      color: #333;
-      margin-bottom: 8px;
+      color: #8b7355;
+      letter-spacing: 3px;
+      margin-bottom: 12px;
     }
 
     .result-sub {
-      font-size: 14px;
-      color: #888;
+      font-size: 13px;
+      color: #b8a890;
+      letter-spacing: 1px;
+      line-height: 1.6;
+    }
+
+    /* 中式装饰边框 */
+    .chinese-border {
+      position: fixed;
+      pointer-events: none;
+    }
+
+    .chinese-border.top {
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #d4c4a8, transparent);
+    }
+
+    .chinese-border.bottom {
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #d4c4a8, transparent);
     }
   </style>
 </head>
 <body>
+  <div class="chinese-border top"></div>
+
   <div class="header">
-    <h1>婚礼迎宾海报选择</h1>
-    <p>选择一个模板，上传婚纱照预览效果</p>
+    <h1>婚礼迎宾海报</h1>
+    <p>选择喜欢的风格，上传照片预览</p>
   </div>
 
   <div class="section">
-    <div class="section-title">请选择模板风格</div>
+    <div class="section-title">— 模板选择 —</div>
     <div class="template-grid" id="templateGrid"></div>
   </div>
 
   <div class="preview-section" id="previewSection">
-    <div class="preview-title">上传婚纱照预览</div>
+    <div class="preview-header">
+      <div class="preview-title">上传婚纱照</div>
+      <div class="preview-subtitle">点击下方区域选择照片</div>
+    </div>
     <div class="preview-container" id="previewContainer"></div>
   </div>
 
-  <button class="confirm-btn" id="confirmBtn" onclick="confirmSelection()">确认选择此模板</button>
+  <button class="confirm-btn" id="confirmBtn" onclick="confirmSelection()">确认选择</button>
 
   <div class="result-section" id="resultSection">
     <div class="result-icon">
@@ -262,67 +406,55 @@
       </svg>
     </div>
     <div class="result-text">已确认选择</div>
-    <div class="result-sub">请截图此页面发给设计师</div>
+    <div class="result-sub">请截图此页面<br>发给设计师</div>
   </div>
 
+  <div class="chinese-border bottom"></div>
+
   <script>
-    // 模板数据
+    // 模板数据 - 简约中式风格
     const templates = [
       {
         id: 1,
-        name: '现代简约',
-        image: 'https://images.unsplash.com/photo-1529634806980-85c3dd6d34ec?w=400&h=533&fit=crop',
+        name: '香槟极简',
         slots: 1,
-        desc: '简洁大方'
+        type: 'single',
+        desc: '单图极简'
       },
       {
         id: 2,
-        name: '小清新',
-        image: 'https://images.unsplash.com/photo-1519741497674-611481863241?w=400&h=533&fit=crop',
+        name: '素雅新中',
         slots: 1,
-        desc: '自然温馨'
+        type: 'single',
+        desc: '单图新中式'
       },
       {
         id: 3,
-        name: '新中式',
-        image: 'https://images.unsplash.com/photo-1604017017017-68ac9c7e1b43?w=400&h=533&fit=crop',
+        name: '温婉韩式',
         slots: 1,
-        desc: '传统韵味'
+        type: 'single',
+        desc: '单图韩风'
       },
       {
         id: 4,
-        name: '韩式优雅',
-        image: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=400&h=533&fit=crop',
+        name: '经典留白',
         slots: 1,
-        desc: '温婉浪漫'
+        type: 'single',
+        desc: '单图简约'
       },
       {
         id: 5,
-        name: '自然森系',
-        image: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce48a?w=400&h=533&fit=crop',
-        slots: 1,
-        desc: '森系风格'
+        name: '双影相依',
+        slots: 2,
+        type: 'dual',
+        desc: '双图排列'
       },
       {
         id: 6,
-        name: '电影质感',
-        image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=400&h=533&fit=crop',
-        slots: 1,
-        desc: '大片风格'
-      },
-      {
-        id: 7,
-        name: '轻奢质感',
-        image: 'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=400&h=533&fit=crop',
-        slots: 1,
-        desc: '精致优雅'
-      },
-      {
-        id: 8,
-        name: '文艺复古',
-        image: 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=400&h=533&fit=crop',
-        slots: 1,
-        desc: '复古胶片'
+        name: '携手同行',
+        slots: 2,
+        type: 'dual',
+        desc: '双图并列'
       }
     ];
 
@@ -334,40 +466,46 @@
       const grid = document.getElementById('templateGrid');
       grid.innerHTML = templates.map(t => `
         <div class="template-item" onclick="selectTemplate(${t.id})" id="tpl-${t.id}">
-          <img src="${t.image}" alt="${t.name}">
-          <div class="template-label">${t.name}</div>
-          <div class="template-tag">${t.slots}图</div>
+          <span class="template-tag">${t.slots}图</span>
+          <div class="template-inner">
+            <div class="template-preview">
+              <div class="poster-mock type-${t.type}">
+                <div class="poster-img-area"></div>
+                <div class="poster-text-area"></div>
+              </div>
+            </div>
+            <div class="template-info">
+              <div class="template-name">${t.name}</div>
+              <div class="template-slots">${t.desc}</div>
+            </div>
+          </div>
         </div>
       `).join('');
     }
 
     // 选择模板
     function selectTemplate(id) {
-      // 取消之前的选中
       document.querySelectorAll('.template-item').forEach(el => el.classList.remove('selected'));
-
-      // 选中当前
-      const item = document.getElementById(`tpl-${id}`);
-      item.classList.add('selected');
+      document.getElementById(`tpl-${id}`).classList.add('selected');
 
       selectedTemplate = templates.find(t => t.id === id);
       uploadedImages = [];
 
-      // 显示预览区
       const previewSection = document.getElementById('previewSection');
       const container = document.getElementById('previewContainer');
 
       container.innerHTML = '';
       for (let i = 0; i < selectedTemplate.slots; i++) {
+        const slotNum = i + 1;
         container.innerHTML += `
-          <div class="preview-img" id="slot-${i}" onclick="triggerUpload(${i})">
+          <div class="preview-slot" id="slot-${i}" onclick="triggerUpload(${i})">
             <div class="preview-placeholder">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <rect x="3" y="3" width="18" height="18" rx="2"/>
                 <circle cx="8.5" cy="8.5" r="1.5"/>
                 <path d="M21 15l-5-5L5 21"/>
               </svg>
-              <div>点击上传第${i + 1}张</div>
+              <span>第${slotNum}张</span>
             </div>
           </div>
         `;
@@ -375,6 +513,7 @@
 
       previewSection.classList.add('show');
       document.getElementById('confirmBtn').classList.remove('active');
+      window.scrollTo({ top: previewSection.offsetTop - 20, behavior: 'smooth' });
     }
 
     // 触发上传
@@ -402,11 +541,7 @@
     function checkConfirmBtn() {
       const allFilled = uploadedImages.length >= selectedTemplate.slots && uploadedImages.every(img => img);
       const btn = document.getElementById('confirmBtn');
-      if (allFilled) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
+      allFilled ? btn.classList.add('active') : btn.classList.remove('active');
     }
 
     // 确认选择
